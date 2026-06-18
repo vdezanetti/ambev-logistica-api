@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/vdezanetti/ambev-logistica-api#readme",
   "dependencies": {
-    "@vercel/node": "^5.8.17"
+    "@vercel/node": "^5.8.17",
+    "express": "^5.2.1"
   }
 }
