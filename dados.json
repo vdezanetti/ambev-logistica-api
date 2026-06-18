@@ -1,0 +1,47 @@
+{
+  "motoristas": [
+    {
+      "nome": "Anderson Rego",
+      "tempo_casa": "3 anos 1 mes",
+      "tml": "00:25",
+      "tml_status": "OK",
+      "tempo_rota": "05:42",
+      "devolucao": "1.54%",
+      "devolucao_status": "OK",
+      "tracking": "100.00%",
+      "premiacao_folha": 500.00,
+      "faltas": 0,
+      "atestados": 0,
+      "suspenso": "Nao"
+    },
+    {
+      "nome": "Carlos Souza",
+      "tempo_casa": "1 ano 4 meses",
+      "tml": "00:45",
+      "tml_status": "NOK",
+      "tempo_rota": "06:15",
+      "devolucao": "3.10%",
+      "devolucao_status": "NOK",
+      "tracking": "94.50%",
+      "premiacao_folha": 0.00,
+      "faltas": 1,
+      "atestados": 0,
+      "suspenso": "Nao"
+    }
+  ],
+  "supervisor_geral": {
+    "total_colaboradores": 2,
+    "metas_ok": {
+      "tml": 1,
+      "devolucao": 1
+    },
+    "metas_nok": {
+      "tml": 1,
+      "devolucao": 1
+    },
+    "total_absenteismo": {
+      "faltas_total": 1,
+      "atestados_total": 0
+    }
+  }
+}
