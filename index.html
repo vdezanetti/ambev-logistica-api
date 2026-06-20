@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rondobier Distribuição</title>
+    <style>
+        :root {
+            --cor-primaria: #ffc107;
+            --cor-fundo: #f4f6f9;
+            --cor-card: #ffffff;
+            --cor-texto: #333333;
+            --cor-sucesso: #28a745;
+            --cor-alerta: #dc3545;
+            --cor-azul: #007bff;
+            --cor-rv: #20c997;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            margin: 0;
+            padding: 12px;
+        }
+
+        header {
+            background-color: #111;
+            color: #fff;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+            color: var(--cor-primaria);
+            font-weight: 800;
+        }
+
+        header p {
+            margin: 4px 0 12px 0;
+            font-size: 13px;
+            color: #aaa;
+        }
+
+        .controles-visao {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-visao {
+            flex: 1;
+            background-color: #222;
+            color: #ccc;
+            border: none;
+            padding: 14px 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-visao.ativo {
+            background-color: var(--cor-primaria);
+            color: #111;
+        }
+
+        .busca-container {
+            margin-bottom: 15px;
+        }
+
+        .input-busca {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            outline: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .input-busca:focus {
+            border-color: var(--cor-primaria);
+        }
+
+        .bloco-indicadores {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-top: 6px solid #111;
+        }
+
+        .bloco-indicadores.financeiro { border-top-color: var(--cor-rv); }
+        .bloco-indicadores.graficos-bloco { border-top-color: #6f42c1; }
+
+        .bloco-indicadores h2 {
+            font-size: 14px;
+            margin: 0 0 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #444;
+        }
+
+        .grid-indicadores-gerais {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .card-sub-indicador {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #eee;
+        }
+
+        .card-sub-indicador .label {
+            font-size: 11px;
+            color: #666;
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .card-sub-indicador .valor {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111;
+        }
+
+        .grid-graficos {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media(max-width: 400px) {
+            .grid-graficos {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .container-grafico {
+            background: #fdfdfd;
+            border: 1px solid #f0f0f0;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .titulo-grafico {
+            font-size: 12px;
+            font-weight: 700;
+            color: #555;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .pizza-svg {
+            transform: rotate(-90deg);
+            border-radius: 50%;
+        }
+
+        .legenda-grafico {
+            margin-top: 8px;
+            font-size: 11px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .legenda-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .quadradinho {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+        }
+
+        .lista-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .card-colaborador {
+            background-color: var(--cor-card);
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            padding: 16px;
+            border-left: 6px solid var(--cor-primaria);
+        }
+
+        .card-colaborador.ajudante-card { border-left-color: var(--cor-azul); }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .card-header h3 {
+            margin: 0;
+            font-size: 13px;
+            font-weight: 700;
+            color: #222;
+        }
+
+        .badge-log {
+            background-color: #e9ecef;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #444;
+        }
+
+        .metrica-linha {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 6px 0;
+            font-size: 13px;
+        }
+
+        .metrica-linha .label { color: #666; }
+        .metrica-linha .valor { font-weight: 700; color: #111; }
+
+        .status-rv {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div>
+            <h1>RONDOBIER</h1>
+            <p>Operação Logística - Proj. Vinicius Dezanetti</p>
+        </div>
+        
+        <div class="controles-visao">
+            <button class="btn-visao ativo" onclick="mudarAba('TODOS', this)">Geral</button>
+            <button class="btn-visao" onclick="mudarAba('MOTORISTA', this)">Motoristas</button>
+            <button class="btn-visao" onclick="mudarAba('AJUDANTE', this)">Ajudantes</button>
+        </div>
+    </header>
+
+    <main>
+        <div class="busca-container" id="containerBusca" style="display: none;">
+            <input type="text" id="inputBusca" class="input-busca" placeholder="Buscar por nome ou código...">
+        </div>
+
+        <div id="painelConteudo">
+            <!-- Injetado dinamicamente -->
+        </div>
+    </main>
+
+    <script>
+        const motoristasData = [
+            { "NOME": "AMAURI LOURENÇO DA SILVA JUNIO", "COD_LOG": "106", "JL": "15:03", "TML": "00:44", "DEVOLUCAO": "4,96%", "TRACKING": "79,8%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "ANDERSON COELHO DE OLIVEIRA", "COD_LOG": "61", "JL": "12:37", "TML": "00:54", "DEVOLUCAO": "0,74%", "TRACKING": "93,8%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "ANDERSON SILVA IMPERIANO", "COD_LOG": "1", "JL": "08:51", "TML": "02:01", "DEVOLUCAO": "4,55%", "TRACKING": "61,1%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "ANDERSON SOUZA PERIOTTO", "COD_LOG": "84", "JL": "12:12", "TML": "00:49", "DEVOLUCAO": "3,79%", "TRACKING": "83,0%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "ANTÔNIO MARCOS VIDAL DO NASCIM", "COD_LOG": "108", "JL": "13:47", "TML": "00:43", "DEVOLUCAO": "3,66%", "TRACKING": "84,1%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "BRUNO BALDEZ DOS SANTOS", "COD_LOG": "111", "JL": "12:04", "TML": "00:46", "DEVOLUCAO": "2,44%", "TRACKING": "89,7%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "CASSIO MARQUES DE MELO", "COD_LOG": "86", "JL": "13:42", "TML": "00:44", "DEVOLUCAO": "4,13%", "TRACKING": "85,6%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "DELANO FEITOSA DE SOUSA BEZERR", "COD_LOG": "117", "JL": "15:07", "TML": "00:42", "DEVOLUCAO": "4,88%", "TRACKING": "78,3%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "ELENILDO DA SILVA DESMONI", "COD_LOG": "98", "JL": "16:49", "TML": "00:38", "DEVOLUCAO": "3,43%", "TRACKING": "82,3%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "FABIO DANTAS LIMA", "COD_LOG": "37", "JL": "10:45", "TML": "01:54", "DEVOLUCAO": "0,86%", "TRACKING": "85,4%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "FERNANDO HENRIQUE MAGALHÃES DE", "COD_LOG": "115", "JL": "12:34", "TML": "00:40", "DEVOLUCAO": "1,04%", "TRACKING": "92,5%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "FRANCISCO GABRIEL LOPES DA SIL", "COD_LOG": "116", "JL": "13:39", "TML": "00:35", "DEVOLUCAO": "1,79%", "TRACKING": "90,0%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "FRANCISCO HONORATO BRANDAO", "COD_LOG": "69", "JL": "12:31", "TML": "00:58", "DEVOLUCAO": "0,90%", "TRACKING": "92,4%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "IVAN DE OLIVEIRA LOPES", "COD_LOG": "96", "JL": "11:53", "TML": "00:47", "DEVOLUCAO": "1,74%", "TRACKING": "90,5%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "JANIO ALVES LOPES", "COD_LOG": "113", "JL": "13:43", "TML": "00:50", "DEVOLUCAO": "0,62%", "TRACKING": "96,1%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "JEZIEL LEMES DA SILVA", "COD_LOG": "13", "JL": "12:01", "TML": "01:50", "DEVOLUCAO": "0,36%", "TRACKING": "77,6%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "JOSE FERNANDES", "COD_LOG": "14", "JL": "13:48", "TML": "00:59", "DEVOLUCAO": "0,25%", "TRACKING": "82,2%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "JURANDIR DE JESUS PRATES", "COD_LOG": "107", "JL": "12:33", "TML": "00:51", "DEVOLUCAO": "6,14%", "TRACKING": "75,0%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "LUIZ EDUARDO TELES PIMENTEL", "COD_LOG": "112", "JL": "10:57", "TML": "00:50", "DEVOLUCAO": "5,34%", "TRACKING": "80,6%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "MARCELO DE SOUZA DA ENCARNAÇÃO", "COD_LOG": "89", "JL": "10:56", "TML": "01:49", "DEVOLUCAO": "0,98%", "TRACKING": "91,2%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "MARCIO LOPES XAVIER", "COD_LOG": "58", "JL": "12:03", "TML": "00:45", "DEVOLUCAO": "4,33%", "TRACKING": "80,2%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "MARIO ESTENSSORO ROSSENDY", "COD_LOG": "78", "JL": "12:32", "TML": "01:53", "DEVOLUCAO": "0,00%", "TRACKING": "100%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "NILTON CLEUTON FREITAS ALBUQUE", "COD_LOG": "20", "JL": "13:28", "TML": "00:50", "DEVOLUCAO": "6,31%", "TRACKING": "83,1%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "PAULO CESAR CARVALHO BEZERRA", "COD_LOG": "66", "JL": "15:22", "TML": "00:48", "DEVOLUCAO": "1,82%", "TRACKING": "88,9%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "ROBSON CIDADE DA SILVA", "COD_LOG": "24", "JL": "13:23", "TML": "00:54", "DEVOLUCAO": "2,13%", "TRACKING": "89,1%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "ROBSON SOUZA DA SILVA", "COD_LOG": "140", "JL": "11:20", "TML": "00:35", "DEVOLUCAO": "1,50%", "TRACKING": "92,0%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "RODRIGO CASTRO DE OLIVEIRA", "COD_LOG": "141", "JL": "12:45", "TML": "00:41", "DEVOLUCAO": "2,10%", "TRACKING": "91,3%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "ROMANO BARBOSA PINTO", "COD_LOG": "60", "JL": "10:30", "TML": "01:56", "DEVOLUCAO": "0,00%", "TRACKING": "100%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "RONI DE SOUZA DOS SANTOS", "COD_LOG": "34", "JL": "10:09", "TML": "00:47", "DEVOLUCAO": "1,60%", "TRACKING": "91,2%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "PAULO SERGIO XAVIER RODRIGUES", "COD_LOG": "118", "JL": "15:05", "TML": "00:33", "DEVOLUCAO": "1,53%", "TRACKING": "91,4%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "JULIO CESAR AURELINO JAUNE", "COD_LOG": "119", "JL": "15:40", "TML": "00:36", "DEVOLUCAO": "0,46%", "TRACKING": "97,8%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "ALEXSANDRO FERREIRA", "COD_LOG": "120", "JL": "16:44", "TML": "00:40", "DEVOLUCAO": "3,52%", "TRACKING": "81,2%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "JAILSON AGUIAR CAMPOS", "COD_LOG": "123", "JL": "15:02", "TML": "00:44", "DEVOLUCAO": "1,66%", "TRACKING": "89,5%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "MAICON RODRIGUES", "COD_LOG": "124", "JL": "15:28", "TML": "00:40", "DEVOLUCAO": "3,66%", "TRACKING": "83,4%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "FABRICIO ALVES DOS SANTOS MARTINS", "COD_LOG": "125", "JL": "13:27", "TML": "00:26", "DEVOLUCAO": "0,00%", "TRACKING": "100%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "LUCAS DE OLIVEIRA GUARESQUE", "COD_LOG": "142", "JL": "10:50", "TML": "00:18", "DEVOLUCAO": "1,10%", "TRACKING": "94,0%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "ITALO FELIPE PIMENTA BRITO", "COD_LOG": "127", "JL": "12:24", "TML": "00:45", "DEVOLUCAO": "0,00%", "TRACKING": "100%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "EDEN SANTANA FREIRE", "COD_LOG": "143", "JL": "14:10", "TML": "00:55", "DEVOLUCAO": "5,10%", "TRACKING": "73,0%", "ABSENTEISMO": "FALTA", "VALE": "AVARIA" },
+            { "NOME": "GENILSON OLIVEIRA DA COSTA", "COD_LOG": "144", "JL": "13:55", "TML": "00:48", "DEVOLUCAO": "4,20%", "TRACKING": "81,0%", "ABSENTEISMO": "FALTA", "VALE": "OK" },
+            { "NOME": "MICHAEL DOUCLAS RODRIGUES PORT", "COD_LOG": "18", "JL": "10:02", "TML": "00:32", "DEVOLUCAO": "0,28%", "TRACKING": "66,0%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "REDNEISSON SILVA DE SOUZA", "COD_LOG": "23", "JL": "14:09", "TML": "00:42", "DEVOLUCAO": "5,34%", "TRACKING": "78,5%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "JELESSAN JESUS DOS SANTOS", "COD_LOG": "63", "JL": "13:27", "TML": "00:43", "DEVOLUCAO": "7,87%", "TRACKING": "71,5%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "ALESSANDRO PEREIRA GOMES", "COD_LOG": "56", "JL": "10:08", "TML": "00:41", "DEVOLUCAO": "1,31%", "TRACKING": "92,1%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "ALEXANDRE SILVA DOS SANTOS", "COD_LOG": "87", "JL": "12:24", "TML": "00:34", "DEVOLUCAO": "2,07%", "TRACKING": "89,4%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "PEDRO H. GALDINO PINHEIRO", "COD_LOG": "95", "JL": "10:13", "TML": "00:36", "DEVOLUCAO": "2,53%", "TRACKING": "88,0%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "MATEUS FERREIRA DE OLIVEIRA", "COD_LOG": "145", "JL": "15:20", "TML": "01:10", "DEVOLUCAO": "6,80%", "TRACKING": "65,0%", "ABSENTEISMO": "FALTA", "VALE": "AVARIA" }
+        ];
+
+        const ajudantesData = [
+            { "NOME": "ANDERSON GOMES DE OLIVEIRA", "COD_LOG": "26", "TML": "00:15", "TR": "08:55", "DEVOLUCAO": "2,86%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "ANDERSON GOMES REGO", "COD_LOG": "3", "TML": "00:19", "TR": "09:02", "DEVOLUCAO": "1,54%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "ARGEL MAGNO JUSTIANO DAS NEVES", "COD_LOG": "8", "TML": "00:12", "TR": "09:00", "DEVOLUCAO": "0,88%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "ATOS FELIPE SOARES DE CARVALHO", "COD_LOG": "17", "TML": "00:18", "TR": "11:02", "DEVOLUCAO": "0,94%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "DIONI CONCEIÇÃO PEIXOTO", "COD_LOG": "87", "TML": "00:22", "TR": "06:40", "DEVOLUCAO": "1,90%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "DOUGLAS RIBEIRO MENEZES", "COD_LOG": "106", "TML": "00:14", "TR": "07:46", "DEVOLUCAO": "2,03%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "EDUARDO FELIPE FERRAZ DE SOUZA", "COD_LOG": "88", "TML": "00:25", "TR": "07:05", "DEVOLUCAO": "1,96%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "EDUARDO MENDONCA QUINTO ROCHA", "COD_LOG": "64", "TML": "00:19", "TR": "09:40", "DEVOLUCAO": "1,28%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "EDUARDO PIMENTA PINTO", "COD_LOG": "38", "TML": "00:26", "TR": "12:10", "DEVOLUCAO": "2,21%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "EDWARD NICHOLAS BARBOSA DA SIL", "COD_LOG": "13", "TML": "00:15", "TR": "10:15", "DEVOLUCAO": "2,52%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "ELIAN FERREIRA LOPES", "COD_LOG": "122", "TML": "00:11", "TR": "06:10", "DEVOLUCAO": "4,00%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "EVERTON RAMOS DOS SANTOS", "COD_LOG": "127", "TML": "00:23", "TR": "09:30", "DEVOLUCAO": "2,03%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "EZEQUIEL PEREIRA DORNELLES", "COD_LOG": "131", "TML": "00:17", "TR": "08:14", "DEVOLUCAO": "1,27%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "FRANCISCO DE ASSIS SOUZA", "COD_LOG": "73", "TML": "00:19", "TR": "08:45", "DEVOLUCAO": "2,88%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "FRANCISCO FRANMARION ALVES", "COD_LOG": "47", "TML": "00:14", "TR": "08:12", "DEVOLUCAO": "1,81%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "FRANCISCO NOGUEIRA DA SILVA", "COD_LOG": "56", "TML": "00:22", "TR": "08:15", "DEVOLUCAO": "3,49%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "GABRIEL DOS SANTOS LIMA", "COD_LOG": "115", "TML": "00:25", "TR": "07:18", "DEVOLUCAO": "4,63%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "GLEIDIVAN LOBATO MONTEIRO", "COD_LOG": "86", "TML": "00:13", "TR": "07:15", "DEVOLUCAO": "2,62%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "GUSTAVO GOMES DA SILVA", "COD_LOG": "49", "TML": "00:17", "TR": "09:20", "DEVOLUCAO": "0,83%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "HANDREO FARIAS SANTOS", "COD_LOG": "201", "TML": "00:18", "TR": "08:10", "DEVOLUCAO": "1,20%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "HIGO JOSÉ ARAUJO DE LIMA", "COD_LOG": "66", "TML": "00:29", "TR": "11:05", "DEVOLUCAO": "5,42%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "IZAIAS PINTO DA SILVA", "COD_LOG": "202", "TML": "00:14", "TR": "07:30", "DEVOLUCAO": "2,10%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "JACKSON ANGELIM DE LIMA", "COD_LOG": "90", "TML": "00:16", "TR": "08:12", "DEVOLUCAO": "0,97%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "JONATHAN WILLIAM FALCÃO LIMA", "COD_LOG": "118", "TML": "00:28", "TR": "10:44", "DEVOLUCAO": "5,60%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "JOSÉ LAYRTON", "COD_LOG": "80", "TML": "00:31", "TR": "10:50", "DEVOLUCAO": "6,63%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "JOSIVAN MARQUES DA SILVA", "COD_LOG": "77", "TML": "00:12", "TR": "09:10", "DEVOLUCAO": "0,00%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "JOSUE FRANCO MACHADO", "COD_LOG": "91", "TML": "00:24", "TR": "10:02", "DEVOLUCAO": "3,99%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "LUANDERSON CASTRO DOS REIS", "COD_LOG": "54", "TML": "00:15", "TR": "07:50", "DEVOLUCAO": "1,60%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "LUCAS FERREIRA LOPES", "COD_LOG": "72", "TML": "00:11", "TR": "06:22", "DEVOLUCAO": "1,99%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "LUCAS RICHARD PINHERO BENTO", "COD_LOG": "41", "TML": "00:14", "TR": "07:34", "DEVOLUCAO": "4,07%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "MAILSON SUPRIANO DA SILVA", "COD_LOG": "125", "TML": "00:16", "TR": "07:55", "DEVOLUCAO": "3,46%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "MARCELO SILVA LEAL", "COD_LOG": "112", "TML": "00:21", "TR": "08:34", "DEVOLUCAO": "3,60%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "MISAEL ALVES RIBEIRO", "COD_LOG": "96", "TML": "00:19", "TR": "08:50", "DEVOLUCAO": "4,40%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "OSMAR ANDRUCHEVITZ", "COD_LOG": "89", "TML": "00:17", "TR": "09:48", "DEVOLUCAO": "1,59%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "PEDRO NOGUEIRA SILVA JUNIOR", "COD_LOG": "76", "TML": "00:13", "TR": "07:58", "DEVOLUCAO": "1,42%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "RENAN OLIVEIRA DE MOURÃO", "COD_LOG": "78", "TML": "00:15", "TR": "08:32", "DEVOLUCAO": "0,90%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "RODRIGO GLORIA TRINDADE", "COD_LOG": "16", "TML": "00:12", "TR": "06:44", "DEVOLUCAO": "3,43%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "ROGERIO SILVA DOS SANTOS", "COD_LOG": "129", "TML": "00:33", "TR": "10:55", "DEVOLUCAO": "6,20%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "THÁLISSON PEREIRA CAMILO", "COD_LOG": "110", "TML": "00:14", "TR": "08:05", "DEVOLUCAO": "1,37%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "THIAGO MATHEUS DALBEM DE SOUZA", "COD_LOG": "132", "TML": "00:19", "TR": "08:52", "DEVOLUCAO": "3,22%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "VALDEIR SILVA SOUSA", "COD_LOG": "130", "TML": "00:13", "TR": "07:42", "DEVOLUCAO": "2,84%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "VANDERSON NASCIMENTO SILVA", "COD_LOG": "111", "TML": "00:35", "TR": "11:22", "DEVOLUCAO": "8,19%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "VICTOR MACIEL MUNIZ", "COD_LOG": "104", "TML": "00:16", "TR": "08:24", "DEVOLUCAO": "2,47%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "WALLACE ALEXANDRE AMORIM FELIX", "COD_LOG": "50", "TML": "00:29", "TR": "10:33", "DEVOLUCAO": "6,64%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "BRENO GONÇALVES CAMPOS", "COD_LOG": "134", "TML": "00:12", "TR": "06:58", "DEVOLUCAO": "1,79%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "KLENNER RONAN PIRES OLIVEIRA", "COD_LOG": "135", "TML": "00:18", "TR": "09:12", "DEVOLUCAO": "2,30%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "RIAM MAYCON TANGINA DE OLIVEIRA", "COD_LOG": "136", "TML": "00:14", "TR": "07:35", "DEVOLUCAO": "1,30%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "WILLIAM PASSOS DOS SANTOS", "COD_LOG": "137", "TML": "00:15", "TR": "08:44", "DEVOLUCAO": "0,85%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "ELIAS DOS SANTOS FEITOSA", "COD_LOG": "138", "TML": "00:17", "TR": "09:28", "DEVOLUCAO": "2,65%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "ISRAEL ELIAS APARECIDO DA SILVA", "COD_LOG": "139", "TML": "00:16", "TR": "08:02", "DEVOLUCAO": "2,30%", "ABSENTEISMO": "OK", "VALE": "OK" },
+            { "NOME": "CARLOS EDUARDO CARMO DE SOUZA", "COD_LOG": "203", "TML": "00:27", "TR": "09:50", "DEVOLUCAO": "4,90%", "ABSENTEISMO": "FALTA", "VALE": "AVARIA" }
+        ];
+
+        let abaAtual = 'TODOS';
+        const inputBusca = document.getElementById('inputBusca');
+        const containerBusca = document.getElementById('containerBusca');
+        const painelConteudo = document.getElementById('painelConteudo');
+
+        function paraMinutos(tempoStr) {
+            const partes = tempoStr.split(':');
+            return (parseInt(partes[0]) * 60) + parseInt(partes[1]);
+        }
+
+        function calcularRVMotorista(m) {
+            const dev = parseFloat(m.DEVOLUCAO.replace('%', '').replace(',', '.'));
+            const track = parseFloat(m.TRACKING.replace('%', '').replace(',', '.'));
+            const minJL = paraMinutos(m.JL);
+            const minTML = paraMinutos(m.TML);
+
+            return {
+                absenteismo: m.ABSENTEISMO === 'OK',
+                vale: m.VALE === 'OK',
+                tml: minTML <= 20,
+                jl: minJL <= 520,
+                devolucao: dev <= 2.5,
+                tracking: track >= 90
+            };
+        }
+
+        function calcularRVAjudante(a) {
+            const dev = parseFloat(a.DEVOLUCAO.replace('%', '').replace(',', '.'));
+            const minTR = paraMinutos(a.TR);
+            const minTML = paraMinutos(a.TML);
+
+            return {
+                absenteismo: a.ABSENTEISMO === 'OK',
+                vale: a.VALE === 'OK',
+                tml: minTML <= 20,
+                tr: minTR <= 520,
+                devolucao: dev <= 2.5
+            };
+        }
+
+        function gerarPizzaSVG(atingido, total) {
+            const pct = total > 0 ? (atingido / total) * 100 : 0;
+            const strokeDash = `${pct} ${100 - pct}`;
+            return `
+                <svg width="80" height="80" viewBox="0 0 32 32" class="pizza-svg">
+                    <circle r="16" cx="16" cy="16" fill="var(--cor-alerta)" />
+                    <circle r="16" cx="16" cy="16" fill="transparent" 
+                            stroke="var(--cor-sucesso)" 
+                            stroke-width="32" 
+                            stroke-dasharray="${strokeDash}" />
+                </svg>
+                <div style="font-size:14px; font-weight:800; margin-top:5px; color:#222">${pct.toFixed(1)}%</div>
+            `;
+        }
+
+        renderizarPainel();
+        inputBusca.addEventListener('input', renderizarPainel);
+
+        function mudarAba(aba, elemento) {
+            document.querySelectorAll('.btn-visao').forEach(btn => btn.classList.remove('ativo'));
+            elemento.classList.add('ativo');
+            abaAtual = aba;
+            inputBusca.value = '';
+            containerBusca.style.display = (aba === 'TODOS') ? 'none' : 'block';
+            renderizarPainel();
+        }
+
+        function renderizarPainel() {
+            painelConteudo.innerHTML = '';
+            const termo = inputBusca.value.toLowerCase().trim();
+
+            if (abaAtual === 'TODOS') {
+                let totalMotoristas = motoristasData.length;
+                let totalAjudantes = ajudantesData.length;
+                let totalGeral = totalMotoristas + totalAjudantes;
+
+                let cAbs = 0, cVale = 0, cTml = 0, cDev = 0, cJl = 0, cTrack = 0, cTr = 0;
+                let somaRV = 0, motFechados = 0, ajuFechados = 0;
+
+                motoristasData.forEach(m => {
+                    const status = calcularRVMotorista(m);
+                    let rv = 0;
+                    if(status.absenteismo) { cAbs++; rv += 300; }
+                    if(status.vale) { cVale++; rv += 300; }
+                    if(status.tml) { cTml++; rv += 100; }
+                    if(status.jl) { cJl++; rv += 100; }
+                    if(status.devolucao) { cDev++; rv += 100; }
+                    if(status.tracking) { cTrack++; rv += 100; }
+                    somaRV += rv;
+                    if(rv === 1000) motFechados++;
+                });
+
+                ajudantesData.forEach(a => {
+                    const status = calcularRVAjudante(a);
+                    let rv = 0;
+                    if(status.absenteismo) { cAbs++; rv += 150; }
+                    if(status.vale) { cVale++; rv += 150; }
+                    if(status.tml) { cTml++; rv += 50; }
+                    if(status.tr) { cTr++; rv += 50; }
+                    if(status.devolucao) { cDev++; rv += 100; }
+                    somaRV += rv;
+                    if(rv === 500) ajuFechados++;
+                });
+
+                painelConteudo.innerHTML = `
+                    <div class="bloco-indicadores financeiro">
+                        <h2>GESTÃO DE KPI</h2>
+                        <div class="grid-indicadores-gerais">
+                            <div class="card-sub-indicador"><span class="label">Desembolso RV</span><span class="valor" style="color: var(--cor-rv)">R$ ${somaRV.toLocaleString('pt-BR', {minimumFractionDigits:2})}</span></div>
+                            <div class="card-sub-indicador"><span class="label">Motoristas RV Máx</span><span class="valor">${motFechados} de ${totalMotoristas}</span></div>
+                            <div class="card-sub-indicador"><span class="label">Ajudantes RV Máx</span><span class="valor">${ajuFechados} de ${totalAjudantes}</span></div>
+                            <div class="card-sub-indicador"><span class="label">Eficiência Geral</span><span class="valor">${(((motFechados+ajuFechados)/totalGeral)*100).toFixed(0)}%</span></div>
+                        </div>
+                    </div>
+
+                    <div class="bloco-indicadores graficos-bloco">
+                        <h2>Visão de Indicadores (% de Atingimento)</h2>
+                        <div class="grid-graficos">
+                            <div class="container-grafico">
+                                <div class="titulo-grafico">Absenteísmo (Frota)</div>
+                                ${gerarPizzaSVG(cAbs, totalGeral)}
+                            </div>
+                            <div class="container-grafico">
+                                <div class="titulo-grafico">Vale Financeiro</div>
+                                ${gerarPizzaSVG(cVale, totalGeral)}
+                            </div>
+                            <div class="container-grafico">
+                                <div class="titulo-grafico">TML (Geral)</div>
+                                ${gerarPizzaSVG(cTml, totalGeral)}
+                            </div>
+                            <div class="container-grafico">
+                                <div class="titulo-grafico">Devolução (Geral)</div>
+                                ${gerarPizzaSVG(cDev, totalGeral)}
+                            </div>
+                            <div class="container-grafico">
+                                <div class="titulo-grafico">JL (Motoristas)</div>
+                                ${gerarPizzaSVG(cJl, totalMotoristas)}
+                            </div>
+                            <div class="container-grafico">
+                                <div class="titulo-grafico">Tracking Ambev</div>
+                                ${gerarPizzaSVG(cTrack, totalMotoristas)}
+                            </div>
+                            <div class="container-grafico">
+                                <div class="titulo-grafico">TR (Ajudantes)</div>
+                                ${gerarPizzaSVG(cTr, totalAjudantes)}
+                            </div>
+                        </div>
+                        <div class="legenda-grafico">
+                            <div class="legenda-item"><div class="quadradinho" style="background:var(--cor-sucesso)"></div> Dentro da Meta</div>
+                            <div class="legenda-item"><div class="quadradinho" style="background:var(--cor-alerta)"></div> Fora da Meta</div>
+                        </div>
+                    </div>
+                `;
+            } 
+            else if (abaAtual === 'MOTORISTA') {
+                const filtrados = motoristasData.filter(m => m.NOME.toLowerCase().includes(termo) || m.COD_LOG.includes(termo));
+                const listaDiv = document.createElement('div');
+                listaDiv.className = 'lista-vertical';
+
+                if(filtrados.length === 0) {
+                    painelConteudo.innerHTML = '<p style="text-align:center; padding:20px; color:#777;">Nenhum motorista encontrado.</p>';
+                    return;
+                }
+
+                filtrados.forEach(m => {
+                    const status = calcularRVMotorista(m);
+                    let valorRV = (status.absenteismo ? 300 : 0) + (status.vale ? 300 : 0) + (status.tml ? 100 : 0) + (status.jl ? 100 : 0) + (status.devolucao ? 100 : 0) + (status.tracking ? 100 : 0);
+                    const eMetaCheia = valorRV === 1000;
+                    
+                    const div = document.createElement('div');
+                    div.className = 'card-colaborador';
+                    div.innerHTML = `
+                        <div class="card-header">
+                            <h3>${m.NOME}</h3>
+                            <span class="badge-log">LOG: ${m.COD_LOG}</span>
+                        </div>
+                        <div class="metrica-linha"><span class="label">Absenteísmo / Vale:</span><span class="valor">${m.ABSENTEISMO} / ${m.VALE}</span></div>
+                        <div class="metrica-linha"><span class="label">TML / JL:</span><span class="valor" style="color: ${!status.tml || !status.jl ? 'var(--cor-alerta)' : 'var(--cor-sucesso)'}">${m.TML} / ${m.JL}</span></div>
+                        <div class="metrica-linha"><span class="label">Devolução:</span><span class="valor" style="color: ${!status.devolucao ? 'var(--cor-alerta)' : 'var(--cor-sucesso)'}">${m.DEVOLUCAO}</span></div>
+                        <div class="metrica-linha"><span class="label">Tracking Ambev:</span><span class="valor" style="color: ${!status.tracking ? 'var(--cor-alerta)' : 'var(--cor-sucesso)'}">${m.TRACKING}</span></div>
+                        
+                        <div class="status-rv" style="color: ${eMetaCheia ? 'var(--cor-sucesso)' : '#e0a800'}">
+                            <span>${eMetaCheia ? 'META CHEIA' : 'HOUVE DESCONTO'}</span>
+                            <span>RV: R$ ${valorRV},00</span>
+                        </div>
+                    `;
+                    listaDiv.appendChild(div);
+                });
+                painelConteudo.appendChild(listaDiv);
+            } 
+            else if (abaAtual === 'AJUDANTE') {
+                const filtrados = ajudantesData.filter(a => a.NOME.toLowerCase().includes(termo) || a.COD_LOG.includes(termo));
+                const listaDiv = document.createElement('div');
+                listaDiv.className = 'lista-vertical';
+
+                if(filtrados.length === 0) {
+                    painelConteudo.innerHTML = '<p style="text-align:center; padding:20px; color:#777;">Nenhum ajudante encontrado.</p>';
+                    return;
+                }
+
+                filtrados.forEach(a => {
+                    const status = calcularRVAjudante(a);
+                    let valorRV = (status.absenteismo ? 150 : 0) + (status.vale ? 150 : 0) + (status.tml ? 50 : 0) + (status.tr ? 50 : 0) + (status.devolucao ? 100 : 0);
+                    const eMetaCheia = valorRV === 500;
+
+                    const div = document.createElement('div');
+                    div.className = 'card-colaborador ajudante-card';
+                    div.innerHTML = `
+                        <div class="card-header">
+                            <h3>${a.NOME}</h3>
+                            <span class="badge-log">LOG: ${a.COD_LOG}</span>
+                        </div>
+                        <div class="metrica-linha"><span class="label">Absenteísmo / Vale:</span><span class="valor">${a.ABSENTEISMO} / ${a.VALE}</span></div>
+                        <div class="metrica-linha"><span class="label">TML / Tempo de Rota (TR):</span><span class="valor" style="color: ${!status.tml || !status.tr ? 'var(--cor-alerta)' : 'var(--cor-sucesso)'}">${a.TML} / ${a.TR}</span></div>
+                        <div class="metrica-linha"><span class="label">Devolução:</span><span class="valor" style="color: ${!status.devolucao ? 'var(--cor-alerta)' : 'var(--cor-sucesso)'}">${a.DEVOLUCAO}</span></div>
+                        
+                        <div class="status-rv" style="color: ${eMetaCheia ? 'var(--cor-sucesso)' : '#e0a800'}">
+                            <span>${eMetaCheia ? 'META CHEIA' : 'HOUVE DESCONTO'}</span>
+                            <span>RV: R$ ${valorRV},00</span>
+                        </div>
+                    `;
+                    listaDiv.appendChild(div);
+                });
+                painelConteudo.appendChild(listaDiv);
+            }
+        }
+    </script>
+</body>
+</html>
