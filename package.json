@@ -3,23 +3,20 @@
   "version": "1.0.0",
   "description": "",
   "main": "api/index.js",
+  "type": "module",
   "scripts": {
+    "start": "node api/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vdezanetti/ambev-logistica-api.git"
+    "url": "git+https://github.com/vdezanetti/ambev-logistica-api"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/vdezanetti/ambev-logistica-api/issues"
-  },
-  "homepage": "https://github.com/vdezanetti/ambev-logistica-api#readme",
   "dependencies": {
-    "@vercel/node": "^5.8.17",
-    "express": "^5.2.1"
+    "csv-parser": "^3.2.1",
+    "express": "^4.19.2"
   }
 }
